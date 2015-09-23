@@ -1,10 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>titre de fou</title>
+<!-- Load the Paper.js library -->
+<script type="text/javascript" src="js/dist/paper-full.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<!-- Define inlined PaperScript associate it with myCanvas -->
+<script type="text/paperscript" canvas="paper">
+int i=5;
+	var myBall= [
+   new Path.Circle(new Point(70, 70), 50),
+  new Path.Circle(new Point(100, 70), 50),
+  new Path.Circle(new Point(130, 70), 50),
+  new Path.Circle(new Point(150, 70), 50),
+ new Path.Circle(new Point(180, 70), 50)];
+
+myBall[0].fillColor = 'blue';
+myBall[1].fillColor = 'violet';
+myBall[2].fillColor = 'red';
+myBall[3].fillColor = 'orange';
+myBall[4].fillColor = 'yellow';
+
+/*
+var vectorDir =new Point(24, 60);
+vectorDir.length = 5;
+
+function onMouseDown(event) {
+	vectorDir = event.point - myBall.position;
+vectorDir.length = 5;
+}
+function onFrame(event) {
+  myBall.translate(vectorDir);
+}
+*/
+
+		
+
+		
+		
+
+
+</script>
 </head>
 <body>
-<p> hey les petasses</p>
+<title> jeu</title>
+<h1>Snakes</h1>
+	<canvas id="paper" width="1200" height="600"></canvas>
 </body>
 </html>
