@@ -9,30 +9,32 @@
 
 /*
 int i=5;
-	var myBall= [
+	var myBalls= [
    new Path.Circle(new Point(70, 70), 50),
   new Path.Circle(new Point(100, 70), 50),
   new Path.Circle(new Point(130, 70), 50),
   new Path.Circle(new Point(150, 70), 50),
  new Path.Circle(new Point(180, 70), 50)];
 
-myBall[0].fillColor = 'blue';
-myBall[1].fillColor = 'violet';
-myBall[2].fillColor = 'red';
-myBall[3].fillColor = 'orange';
-myBall[4].fillColor = 'yellow';
+myBalls[0].fillColor = 'blue';
+myBalls[1].fillColor = 'violet';
+myBalls[2].fillColor = 'red';
+myBalls[3].fillColor = 'orange';
+myBalls[4].fillColor = 'yellow';
 */
+var myBall= new Path.Circle(to* Point.random(), 50);
+myBall.fillColor = 'blue';
+
 
 var from = new Point(0, 0);
-var to = new Point(1199, 799);
+var to = new Point(1200, 800);
 var rect = new Path.Rectangle(from, to);
 rect.strokeColor = 'black';
 
 
-var myBall= new Path.Circle(new Point(70, 70), 50);
-myBall.fillColor = 'blue';
 
-var vectorDir =new Point(24, 60);
+
+var vectorDir =to* Point.random();
 vectorDir.length = 5;
 
 function onMouseDown(event) {
@@ -40,11 +42,22 @@ function onMouseDown(event) {
 vectorDir.length = 5;
 }
 function onFrame(event) {
-  myBall.translate(vectorDir);
-if( var intersections = myBall.getIntersections(rect)
-{
-alert("gros bouffon, t'as perdu")
+ myBall.translate(vectorDir);
+
+var intersections = myBall.getIntersections(rect);
+
+if(intersections.length !=0  ) {
+
+myBall.position = to*  Point.random() ;
+vectorDir= to*  Point.random() ;
+if (Point.random.length <=0.5)
+{vectorDir.length =-5}
+else {
+vectorDir.length = 5
 }
+vectorDir.length = 5;
+}
+
 }
 
 		
