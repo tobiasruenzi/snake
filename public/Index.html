@@ -6,9 +6,60 @@
 <script type="text/javascript"
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
 <!-- Define inlined PaperScript associate it with myCanvas -->
+<<<<<<< HEAD
 <script type="text/paperscript" canvas="paper" >
 var rect = new Path.Rectangle(from, to);
 		rect.strokeColor = 'black';
+=======
+<script type="text/paperscript" canvas="paper">
+
+/*
+int i=5;
+	var myBall= [
+   new Path.Circle(new Point(70, 70), 50),
+  new Path.Circle(new Point(100, 70), 50),
+  new Path.Circle(new Point(130, 70), 50),
+  new Path.Circle(new Point(150, 70), 50),
+ new Path.Circle(new Point(180, 70), 50)];
+
+myBall[0].fillColor = 'blue';
+myBall[1].fillColor = 'violet';
+myBall[2].fillColor = 'red';
+myBall[3].fillColor = 'orange';
+myBall[4].fillColor = 'yellow';
+*/
+
+var from = new Point(0, 0);
+var to = new Point(1199, 799);
+var rect = new Path.Rectangle(from, to);
+rect.strokeColor = 'black';
+
+
+var myBall= new Path.Circle(new Point(70, 70), 50);
+myBall.fillColor = 'blue';
+
+var vectorDir =new Point(24, 60);
+vectorDir.length = 5;
+
+function onMouseDown(event) {
+	vectorDir = event.point - myBall.position;
+vectorDir.length = 5;
+}
+function onFrame(event) {
+  myBall.translate(vectorDir);
+if( var intersections = myBall.getIntersections(rect)
+{
+alert("gros bouffon, t'as perdu")
+}
+}
+
+		
+
+		
+		
+
+
+>>>>>>> parent of 8543a84... ajout colision
 </script>
 <title> this is the Game </title>
 </head>
