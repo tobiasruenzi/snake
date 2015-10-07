@@ -3,74 +3,18 @@
 <head>
 <!-- Load the Paper.js library -->
 <script type="text/javascript" src="js/dist/paper-full.js"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
 <!-- Define inlined PaperScript associate it with myCanvas -->
-<script type="text/paperscript" canvas="paper">
-
-/*
-int i=5;
-	var myBalls= [
-   new Path.Circle(new Point(70, 70), 50),
-  new Path.Circle(new Point(100, 70), 50),
-  new Path.Circle(new Point(130, 70), 50),
-  new Path.Circle(new Point(150, 70), 50),
- new Path.Circle(new Point(180, 70), 50)];
-
-myBalls[0].fillColor = 'blue';
-myBalls[1].fillColor = 'violet';
-myBalls[2].fillColor = 'red';
-myBalls[3].fillColor = 'orange';
-myBalls[4].fillColor = 'yellow';
-*/
-var myBall= new Path.Circle(to* Point.random(), 50);
-myBall.fillColor = 'blue';
-
-
-var from = new Point(0, 0);
-var to = new Point(1200, 800);
+<script type="text/paperscript" canvas="paper" >
 var rect = new Path.Rectangle(from, to);
-rect.strokeColor = 'black';
-
-
-
-
-var vectorDir =to* Point.random();
-vectorDir.length = 5;
-
-function onMouseDown(event) {
-	vectorDir = event.point - myBall.position;
-vectorDir.length = 5;
-}
-function onFrame(event) {
- myBall.translate(vectorDir);
-
-var intersections = myBall.getIntersections(rect);
-
-if(intersections.length !=0  ) {
-
-myBall.position = to*  Point.random() ;
-vectorDir= to*  Point.random() ;
-if (Point.random.length <=0.5)
-{vectorDir.length =-5}
-else {
-vectorDir.length = 5
-}
-vectorDir.length = 5;
-}
-
-}
-
-		
-
-		
-		
-
-
+		rect.strokeColor = 'black';
 </script>
+<title> this is the Game </title>
 </head>
 <body>
-<title> jeu</title>
-<h1>Snakes</h1>
-	<canvas id="paper" width="1200" height="800" "></canvas>
+	
+	<h1>Snakes</h1>
+	<canvas id="paper" width="1200" height="800" ></canvas>
 </body>
 </html>
