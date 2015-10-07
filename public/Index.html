@@ -6,118 +6,13 @@
 <script type="text/javascript"
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
 
-<script type="text/paperscript" canvas="paper">
-//test
+<script type="text/javascript" src="../Client.js"></script>
 
-
-	var myBall= [
-   new Path.Circle(new Point(70, 70), 20),
-  new Path.Circle(new Point(100, 70), 20),
-  new Path.Circle(new Point(130, 70), 20),
-  new Path.Circle(new Point(150, 70), 20),
- new Path.Circle(new Point(180, 70), 20)];
-
-myBall[0].fillColor = 'blue';
-myBall[1].fillColor = 'violet';
-myBall[2].fillColor = 'red';
-myBall[3].fillColor = 'orange';
-myBall[4].fillColor = 'yellow';
-
-
-var vectorDir =new Point(24, 60);
-vectorDir.length = 5;
-
-function onMouseDown(event) {
-	vectorDir = event.point - myBall[0].position;
-vectorDir.length = 5;
-}
-//function deplSerpent(
-
-function onFrame(event) {
-  	myBall[0].translate(vectorDir);
-	for(var i=myBall.length-1; i>0 ; i--) {
-	
-		var vectorDirsuiv =myBall[i-1].position - myBall[i].position;
-		vectorDirsuiv.length=5;
-		myBall[i].translate(vectorDirsuiv);
-	}
-
-
-}
-
-
-		
-
-		
-		
-
-
-
-//jeu 
-	/*
-	var myBalls= [
-   new Path.Circle(new Point(70, 70), 50),
-  new Path.Circle(new Point(100, 70), 50),
-  new Path.Circle(new Point(130, 70), 50),
-  new Path.Circle(new Point(150, 70), 50),
- new Path.Circle(new Point(180, 70), 50)];
-
-
-myBalls[0].fillColor = 'blue';
-myBalls[1].fillColor = 'violet';
-myBalls[2].fillColor = 'red';
-myBalls[3].fillColor = 'orange';
-myBalls[4].fillColor = 'yellow';
-
-
-
-
-var from = new Point(0, 0);
-var to = new Point(1199, 799);
-var to = new Point(1200, 800);
-var rect = new Path.Rectangle(from, to);
-rect.strokeColor = 'black';
-
-var vectorDir =to* Point.random();
-vectorDir.length = 5;
-
-
-function onMouseDown(event) {
-vectorDir = event.point - myBall.position;
-vectorDir.length = 5;
-}
-
-function onFrame(event) {
- 	myBall.translate(vectorDir);
-	if( var intersections = myBall.getIntersections(rect)
-	{
-		alert("gros bouffon, t'as perdu")
- 		myBall.translate(vectorDir);
-
-		var intersections = myBall.getIntersections(rect);
-
-		if(intersections.length !=0  ) {
-
-		myBall.position = to*  Point.random() ;
-		vectorDir= to*  Point.random() ;
-		if (Point.random.length <=0.5)
-		{
-			vectorDir.length =-5}
-		else {
-			vectorDir.length = 5
-		}
-		vectorDir.length = 5;
-	}
-
-}
-*/
-
-</script>
-<title> this is the Game </title>
+<title>this is the Game</title>
 </head>
 <body>
-	
+
 	<h1>Snakes</h1>
-	<canvas id="paper" width="1200" height="800" ></canvas>
+	<canvas id="paper" width="1200" height="800"></canvas>
 </body>
 </html>
