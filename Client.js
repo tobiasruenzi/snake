@@ -42,12 +42,21 @@
 	var WebSocket = require('ws');
 
 	ws = new WebSocket('ws://localhost:8667');
-
+	
 	ws.on('open', function() {
-		ws.send('something');
+		console.log('Connecte au server');
+		
+		
 	});
 	ws.on('message', function(message) {
-		console.log('received: %s', message);
+		var point = JSON.parse(message);
+	      console.log('received: %s,%s', point.X[0],point.Y[0] );
+		var serpent = {
+			    X : [ 70, 100, 130, 150],
+			    Y:[ 70, 70, 70, 70]
+			    
+			};
+			ws.send(JSON.stringify(serpent));
 	});
 
 	//jeu 

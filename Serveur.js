@@ -18,8 +18,15 @@ var WebSocketServer = require('ws').Server
 , wss = new WebSocketServer({port: 8667});
 wss.on('connection', function(ws) {
   ws.on('message', function(message) {
-      console.log('received: %s', message);
+	  var point = JSON.parse(message);
+      console.log('received: %s', point);
+      var x0= point.X[0];
+      var y0= point.Y[0];
+      console.log('point1 %s,%s', x0, y0);
+      x0++;
+     
+      console.log('point1 modifié %s,%s', x0, y0);
   });
-  ws.send('something');
+  ws.send('Hello');
 });
 
