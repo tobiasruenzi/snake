@@ -16,21 +16,21 @@ ws.onopen = function (event)
   	//console.log('Connecte au server');
 };
 
-var myBall = [new Path.Circle(new Point(70, 70), 20),
-				new Path.Circle(new Point(100, 70), 20),
-				new Path.Circle(new Point(130, 70), 20),
-				new Path.Circle(new Point(160, 70), 20),
-				new Path.Circle(new Point(190, 70), 20),
-				new Path.Circle(new Point(220, 70), 20),
-				new Path.Circle(new Point(250, 70), 20),
-				new Path.Circle(new Point(280, 70), 20),
-				new Path.Circle(new Point(310, 70), 20),
-				new Path.Circle(new Point(340, 70), 20),
-				new Path.Circle(new Point(370, 70), 20)];
+var x=70;
+var y=70;
+var taille=50;
+var myBall = [];
+
+for (var i=0; i<taille;i++){
+	var cercle=new Path.Circle(new Point(x, y-i*2), 20);
+	myBall.push(cercle);
+}
+
+
 var color = new Color(Math.random(), Math.random(), Math.random());
 for (var i = 0; i < myBall.length; i++) {
 	myBall[i].fillColor= color;
-	myBall[i].fillColor.hue =  myBall[0].fillColor.hue + i*10;;
+	myBall[i].fillColor.hue =  myBall[0].fillColor.hue + i;;
 }
 	
 
