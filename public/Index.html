@@ -3,10 +3,67 @@
 <head>
 <!-- Load the Paper.js library -->
 <script type="text/javascript" src="js/dist/paper-full.js"></script>
-<script type="text/javascript"
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
 
-<script type="text/paperscript" src="../Client.js"canvas="paper"></script>
+
+<script type="text/paperscript" canvas="paper">
+//console.log('entree dans le javascript');
+
+ws = new WebSocket('wss://localhost:8999');
+//console.log('server cree');
+
+ws.onopen = function (event) 
+{
+  	//console.log('Connecte au server');
+};
+
+var myBall = [new Path.Circle(new Point(70, 70), 20),
+				new Path.Circle(new Point(100, 70), 20),
+				new Path.Circle(new Point(130, 70), 20),
+				new Path.Circle(new Point(160, 70), 20),
+				new Path.Circle(new Point(190, 70), 20),
+				new Path.Circle(new Point(220, 70), 20),
+				new Path.Circle(new Point(250, 70), 20),
+				new Path.Circle(new Point(280, 70), 20),
+				new Path.Circle(new Point(310, 70), 20),
+				new Path.Circle(new Point(340, 70), 20),
+				new Path.Circle(new Point(370, 70), 20)];
+var color = new Color(Math.random(), Math.random(), Math.random());
+for (var i = 0; i < myBall.length; i++) {
+	myBall[i].fillColor= color;
+	myBall[i].fillColor.hue =  myBall[0].fillColor.hue + i*10;;
+}
+	
+
+
+
+
+var from = new Point(0, 0);
+var to = new Point(1200, 800);
+var rect = new Path.Rectangle(from, to);
+rect.strokeColor = 'black';
+
+var vectorDir =to* Point.random();
+vectorDir.length = 5;
+
+
+function onMouseDown(event) {
+	vectorDir = event.point - myBall[0].position;
+	vectorDir.length = 5;
+
+}
+
+function onFrame(event) {
+
+	for (var i = myBall.length - 1; i > 0; i--) {
+		var vectorDirsuiv = myBall[i - 1].position - myBall[i].position;
+		vectorDirsuiv.length = 5;
+		myBall[i].translate(vectorDirsuiv);
+	}
+	myBall[0].translate(vectorDir);
+}
+	
+console.log('dessin termine');
+</script>
 
 <title>this is the Game</title>
 </head>

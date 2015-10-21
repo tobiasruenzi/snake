@@ -1,0 +1,15 @@
+Pour créer un serveur https, un certificat de connexion seras demandé
+Télécharger OpenSSL
+  
+Copier le fichier openssl.cnf (dans public), dans le même répertoire que le .exe de openssl
+
+Ouvrir OpenSSL
+
+Effectuer les commandes suivantes (sous OpenSSL) :
+genrsa -out key.pem 2048
+req -new -key key.pem -out csr.pem -config openssl.cnf
+req -x509 -days 365 -key key.pem -in csr.pem -out cert.pem -config openssl.cnf
+
+Déplacer les fichier "key.pem" et "cert.pem" dans le dossier private
+
+Lancer le programme
