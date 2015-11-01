@@ -18,7 +18,7 @@ app.configure(function(){
 });
 
 var server = https.createServer(options, app).listen(PORT, HOST);
-console.log('HTTPS Server listening on %s:%s', HOST, PORT);
+console.log('HTTPS Server listening on https://%s:%s', HOST, PORT);
 
 app.get('/', function(req, res) {
 	res.sendfile('public/index.html');
@@ -32,25 +32,46 @@ app.configure(function() {
 var WebSocketServer = require('ws').Server
 , wss = new WebSocketServer({ server:server});
 var Joueurs = [];
-var i=0;
 
+var taille=50;
+var ws1;
+var ws2;
 wss.on('connection', function(ws) {
-	if(Joueurs.length<2){
+	if(Joueurs.length==0){
 
-
-		var posx= Math.random()*430+200;
-		var posy= Math.random()*260+200;
+		ws1=ws;
+		var posx= 550;
+		var posy= 600;
 		var Point1= new Model.Point(posx, posy);
-		var Point2 =new Model.Point(posx, posy+50);
-		var Point3 = new Model.Point(posx, posy+100);
-		var Serpent= new Model.Serpent(Point1, Point2, Point3);
+		var Serpent= new Model.Serpent(Point1);
+		for(var t=0; t<taille;t++){
+			var Point= new Model.Point(posx, posy-t*2);
+			Serpent.Tableau.push(Point);
+		}
 		var Joueur= new Model.Joueur(Serpent, ws);
 
-
-		console.log('nombre de Joueurs deja present  %s',Joueurs.length);
 		Joueurs.push(Joueur);
-		console.log('nouveau joueur x et y %s %s',Joueurs[i].Serpent.Tableau[0].x, Joueurs[i].Serpent.Tableau[0].y);
-		i++;
+		console.log('premier joueur connecté, attente du second');
+		
+		
+	}
+	else if(Joueurs.length==1){
+
+		ws2=ws;
+		var posx= 950;
+		var posy= 600;
+		var Point1= new Model.Point(posx, posy);
+		var Serpent= new Model.Serpent(Point1);
+		for(var t=0; t<taille;t++){
+			var Point= new Model.Point(posx, posy-t*2);
+			Serpent.Tableau.push(Point);
+		}
+		var Joueur= new Model.Joueur(Serpent, ws);
+
+		Joueurs.push(Joueur);
+		console.log('second joueur connecté, lancement');
+		
+		
 		begin(Joueurs);
 	}
 	else{
@@ -63,11 +84,25 @@ wss.on('connection', function(ws) {
 
 function begin(tableau){
 	if(tableau.length==2){
-		var Jeu= new Model.Jeu(Joueurs[0],Joueurs[1])
+		var Jeu= new Model.Jeu(tableau[0],tableau[1])
 		console.log('Jeu cree');
-
+		console.log('serpent1 %s', Jeu.Joueur1.Serpent.Tableau);
+		var message1 = { 
+				type : "creeserpents",
+				Serpent1 : Jeu.Joueur1.Serpent.Tableau,
+				Serpent2 : Jeu.Joueur2.Serpent.Tableau
+		};
+		ws1.send(JSON.stringify(message1));
+		console.log('serpent2 %s', Jeu.Joueur2.Serpent.Tableau);
+		var message2 = { 
+				type : "creeserpents",
+				Serpent1 : Jeu.Joueur2.Serpent.Tableau,
+				Serpent2 : Jeu.Joueur1.Serpent.Tableau
+		};
+		ws2.send(JSON.stringify(message2));
 	}
 }
+
 
 
 

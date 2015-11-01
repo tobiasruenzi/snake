@@ -16,23 +16,11 @@ ws.onopen = function (event)
   	//console.log('Connecte au server');
 };
 
-var x=70;
-var y=70;
-var taille=50;
-var myBall = [];
-
-for (var i=0; i<taille;i++){
-	var cercle=new Path.Circle(new Point(x, y-i*2), 20);
-	myBall.push(cercle);
-}
-
-
 var color = new Color(Math.random(), Math.random(), Math.random());
-for (var i = 0; i < myBall.length; i++) {
-	myBall[i].fillColor= color;
-	myBall[i].fillColor.hue =  myBall[0].fillColor.hue + i;;
-}
-	
+var myBall=[];
+var Ball=[];
+var monserpent;
+var autreserpent;
 
 
 
@@ -45,21 +33,52 @@ rect.strokeColor = 'black';
 var vectorDir =to* Point.random();
 vectorDir.length = 5;
 
-
+/*
 function onMouseDown(event) {
 	vectorDir = event.point - myBall[0].position;
 	vectorDir.length = 5;
 
-}
+}*/
 
 function onFrame(event) {
+ws.onmessage = function (message) 
+{ 
+	console.log('message recus');
+	var msg = JSON.parse(message.data);
 
+	
+	switch(msg.type)
+	{	
+		case "creeserpents" :
+			console.log( msg);
+			monserpent = msg.Serpent1;
+			autreserpent = msg.Serpent2;
+			
+			for (var i=0; i<monserpent.length;i++){
+				var cercle=new Path.Circle(monserpent[i].x,monserpent[i].y, 20);
+				cercle.fillColor= color;
+				cercle.fillColor.hue =  cercle.fillColor.hue + i;
+				myBall.push(cercle);
+				console.log(cercle.center, cercle.center);
+			}
+			for (var i=0; i<autreserpent.length;i++){
+				var cercle=new Path.Circle(autreserpent[i].x,autreserpent[i].y, 20);
+				cercle.fillColor= color;
+				cercle.fillColor.hue =  cercle.fillColor.hue + i;
+				Ball.push(cercle);
+				console.log(cercle.center, cercle.center);
+			}
+			
+	}
+
+};
+/*
 	for (var i = myBall.length - 1; i > 0; i--) {
 		var vectorDirsuiv = myBall[i - 1].position - myBall[i].position;
 		vectorDirsuiv.length = 5;
 		myBall[i].translate(vectorDirsuiv);
 	}
-	myBall[0].translate(vectorDir);
+	myBall[0].translate(vectorDir);*/
 }
 	
 console.log('dessin termine');

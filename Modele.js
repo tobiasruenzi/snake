@@ -8,8 +8,8 @@ function Point(Coordx, Coordy) {
 	this.y=Coordy;
 	
 };
-function Serpent(Point1, Point2, Point3){
-	this.Tableau = [Point1, Point2, Point3];
+function Serpent(Point1){
+	this.Tableau = [Point1];
 }
 function Joueur(Serpent, ws) {
 	this.Serpent=Serpent;
