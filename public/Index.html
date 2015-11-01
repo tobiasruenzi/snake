@@ -33,12 +33,18 @@ rect.strokeColor = 'black';
 var vectorDir =to* Point.random();
 vectorDir.length = 5;
 
-/*
+
 function onMouseDown(event) {
 	vectorDir = event.point - myBall[0].position;
 	vectorDir.length = 5;
+	var message = { 
+				type : "tete",
+				x : vectorDir.x,
+				y : vectorDir.y
+			};
+	ws.send(JSON.stringify(message));
 
-}*/
+}
 
 function onFrame(event) {
 ws.onmessage = function (message) 
@@ -68,17 +74,26 @@ ws.onmessage = function (message)
 				Ball.push(cercle);
 				console.log(cercle.center, cercle.center);
 			}
+
+		case "majserpents" :
+			console.log( msg.Serpent1[0], msg.Serpent2[0]);
+			
+			for (var i=0; i< msg.Serpent1.length;i++){
+				myBall[i].position.x = msg.Serpent1[i].x;
+				myBall[i].position.y = msg.Serpent1[i].y;
+			}
+			for (var i=0; i< msg.Serpent2.length;i++){
+				Ball[i].position.x = msg.Serpent2[i].x;
+				Ball[i].position.y = msg.Serpent2[i].y;
+			}
+			
+			
 			
 	}
 
 };
-/*
-	for (var i = myBall.length - 1; i > 0; i--) {
-		var vectorDirsuiv = myBall[i - 1].position - myBall[i].position;
-		vectorDirsuiv.length = 5;
-		myBall[i].translate(vectorDirsuiv);
-	}
-	myBall[0].translate(vectorDir);*/
+
+
 }
 	
 console.log('dessin termine');

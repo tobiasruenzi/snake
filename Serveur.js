@@ -32,43 +32,44 @@ app.configure(function() {
 var WebSocketServer = require('ws').Server
 , wss = new WebSocketServer({ server:server});
 var Joueurs = [];
-
+var nexttete1= [0, 5];
+var nexttete2= [0, 5];
 var taille=50;
 var ws1;
 var ws2;
 wss.on('connection', function(ws) {
-	if(Joueurs.length==0){
+	if(Joueurs.length===0){
 
 		ws1=ws;
-		var posx= 550;
-		var posy= 600;
-		var Point1= new Model.Point(posx, posy);
-		var Serpent= new Model.Serpent(Point1);
+		var posx1= 550;
+		var posy1= 600;
+		var Point1= new Model.Point(posx1, posy1);
+		var Serpent1= new Model.Serpent(Point1);
 		for(var t=0; t<taille;t++){
-			var Point= new Model.Point(posx, posy-t*2);
-			Serpent.Tableau.push(Point);
+			var Point11= new Model.Point(posx1, posy1-t*2);
+			Serpent1.Tableau.push(Point11);
 		}
-		var Joueur= new Model.Joueur(Serpent, ws);
+		var Joueur1= new Model.Joueur(Serpent1, ws);
 
-		Joueurs.push(Joueur);
+		Joueurs.push(Joueur1);
 		console.log('premier joueur connecté, attente du second');
 		
 		
 	}
-	else if(Joueurs.length==1){
+	else if(Joueurs.length===1){
 
 		ws2=ws;
-		var posx= 950;
-		var posy= 600;
-		var Point1= new Model.Point(posx, posy);
-		var Serpent= new Model.Serpent(Point1);
-		for(var t=0; t<taille;t++){
-			var Point= new Model.Point(posx, posy-t*2);
-			Serpent.Tableau.push(Point);
+		var posx2= 950;
+		var posy2= 600;
+		var Point2= new Model.Point(posx2, posy2);
+		var Serpent2= new Model.Serpent(Point2);
+		for(var t1=0; t1<taille;t1++){
+			var Point22= new Model.Point(posx2, posy2-t1*2);
+			Serpent2.Tableau.push(Point22);
 		}
-		var Joueur= new Model.Joueur(Serpent, ws);
+		var Joueur2= new Model.Joueur(Serpent2, ws);
 
-		Joueurs.push(Joueur);
+		Joueurs.push(Joueur2);
 		console.log('second joueur connecté, lancement');
 		
 		
@@ -78,47 +79,102 @@ wss.on('connection', function(ws) {
 		console.log('deja deux joueurs');
 		ws.close();
 	}
-
+	
+	ws.on('message', function message(event) 
+	{
+		var msg = JSON.parse(event);
+		
+		switch(msg.type)
+		{				
+			case "tete" :
+				console.log("maj tete recu %s %s", msg.x, msg.y);
+				if (ws===ws1)
+					{
+						nexttete1=[msg.x,msg.y];
+					}
+				else if (ws===ws2)
+					{
+						nexttete2=[msg.x,msg.y];
+					}
+				
+				break;
+		}		
+		
+		
+		
+	});
+	
+	
+	
+	
+	
+	
+	
+	
 });
 
 
-function begin(tableau){
-	if(tableau.length==2){
-		var Jeu= new Model.Jeu(tableau[0],tableau[1])
-		console.log('Jeu cree');
-		console.log('serpent1 %s', Jeu.Joueur1.Serpent.Tableau);
+function begin(Joueurs){
+	if(Joueurs.length===2){
+		
+		console.log('serpent1 %s %s', Joueurs[0].Serpent.Tableau[0].x, Joueurs[0].Serpent.Tableau[0].y);
 		var message1 = { 
 				type : "creeserpents",
-				Serpent1 : Jeu.Joueur1.Serpent.Tableau,
-				Serpent2 : Jeu.Joueur2.Serpent.Tableau
+				Serpent1 : Joueurs[0].Serpent.Tableau,
+				Serpent2 : Joueurs[1].Serpent.Tableau
 		};
 		ws1.send(JSON.stringify(message1));
-		console.log('serpent2 %s', Jeu.Joueur2.Serpent.Tableau);
+		console.log('serpent2 %s %s', Joueurs[1].Serpent.Tableau[0].x, Joueurs[1].Serpent.Tableau[0].y);
 		var message2 = { 
 				type : "creeserpents",
-				Serpent1 : Jeu.Joueur2.Serpent.Tableau,
-				Serpent2 : Jeu.Joueur1.Serpent.Tableau
+				Serpent1 : Joueurs[1].Serpent.Tableau,
+				Serpent2 : Joueurs[0].Serpent.Tableau
 		};
 		ws2.send(JSON.stringify(message2));
+		setInterval(onFrame, 10);
+		function onFrame() 
+		{
+			update();
+		}
 	}
+}
+function update(){
+	console.log('calcul');
+	
+	console.log('update serpent 1 %s %s', Joueurs[0].Serpent.Tableau[0].x, Joueurs[0].Serpent.Tableau[0].y);
+	console.log('update serpent 2 %s %s', Joueurs[1].Serpent.Tableau[0].x, Joueurs[1].Serpent.Tableau[0].y);
+	for (var i = Joueurs[0].Serpent.Tableau[0].length - 1; i > 0; i--) {
+		Joueurs[0].Serpent.Tableau[i]= Joueurs[0].Serpent.tableau[i-1];
+		Joueurs[1].Serpent.Tableau[i]= Joueurs[1].Serpent.tableau[i-1];
+	}
+	Joueurs[0].Serpent.Tableau[0].x += nexttete1[0];
+	Joueurs[0].Serpent.Tableau[0].y += nexttete1[1];
+	Joueurs[1].Serpent.Tableau[0].x += nexttete2[0];
+	Joueurs[1].Serpent.Tableau[0].y += nexttete2[1];
+	
+	
+	console.log('update serpent 1 %s %s', Joueurs[0].Serpent.Tableau[0].x, Joueurs[0].Serpent.Tableau[0].y);
+	console.log('update serpent 2 %s %s', Joueurs[1].Serpent.Tableau[0].x, Joueurs[1].Serpent.Tableau[0].y);
+	var message1 = { 
+			type : "majserpents",
+			Serpent1 : Joueurs[0].Serpent.Tableau,
+			Serpent2 :Joueurs[1].Serpent.Tableau
+	};
+	ws1.send(JSON.stringify(message1));
+	
+	var message2 = { 
+			type : "majserpents",
+			Serpent1 : Joueurs[1].Serpent.Tableau,
+			Serpent2 : Joueurs[0].Serpent.Tableau
+	};
+	ws2.send(JSON.stringify(message2));
 }
 
 
 
 
-/*
-		  var point = JSON.parse(message);
-	      console.log('received: %s', point);
-	      var x0= point.X[0];
-	      var y0= point.Y[0];
-	      console.log('point1 %s,%s', x0, y0);
-	      x0++;
-
-	      console.log('point1 modifié %s,%s', x0, y0);
-	  });
- */
 
 
-var Jeu= Model.Jeu(Joueurs[0],Joueurs[1]);
+
 
 
