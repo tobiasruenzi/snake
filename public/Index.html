@@ -16,7 +16,8 @@ ws.onopen = function (event)
   	//console.log('Connecte au server');
 };
 
-var color = new Color(Math.random(), Math.random(), Math.random());
+var color1 = new Color(Math.random(), Math.random(), Math.random());
+var color2 = new Color(Math.random(), Math.random(), Math.random());
 var myBall=[];
 var Ball=[];
 var monserpent;
@@ -43,13 +44,13 @@ function onMouseDown(event) {
 				y : vectorDir.y
 			};
 	ws.send(JSON.stringify(message));
-
+console.log('tete envoyé');
 }
 
 function onFrame(event) {
 ws.onmessage = function (message) 
 { 
-	console.log('message recus');
+	
 	var msg = JSON.parse(message.data);
 
 	
@@ -62,21 +63,21 @@ ws.onmessage = function (message)
 			
 			for (var i=0; i<monserpent.length;i++){
 				var cercle=new Path.Circle(monserpent[i].x,monserpent[i].y, 20);
-				cercle.fillColor= color;
+				cercle.fillColor= color1;
 				cercle.fillColor.hue =  cercle.fillColor.hue + i;
 				myBall.push(cercle);
-				console.log(cercle.center, cercle.center);
+				
 			}
 			for (var i=0; i<autreserpent.length;i++){
 				var cercle=new Path.Circle(autreserpent[i].x,autreserpent[i].y, 20);
-				cercle.fillColor= color;
+				cercle.fillColor= color2;
 				cercle.fillColor.hue =  cercle.fillColor.hue + i;
 				Ball.push(cercle);
-				console.log(cercle.center, cercle.center);
+				
 			}
 
 		case "majserpents" :
-			console.log( msg.Serpent1[0], msg.Serpent2[0]);
+			//console.log( msg.Serpent1[0], msg.Serpent2[0]);
 			
 			for (var i=0; i< msg.Serpent1.length;i++){
 				myBall[i].position.x = msg.Serpent1[i].x;

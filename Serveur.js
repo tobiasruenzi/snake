@@ -45,7 +45,7 @@ wss.on('connection', function(ws) {
 		var posy1= 600;
 		var Point1= new Model.Point(posx1, posy1);
 		var Serpent1= new Model.Serpent(Point1);
-		for(var t=0; t<taille;t++){
+		for(var t=1; t<taille;t++){
 			var Point11= new Model.Point(posx1, posy1-t*2);
 			Serpent1.Tableau.push(Point11);
 		}
@@ -63,7 +63,7 @@ wss.on('connection', function(ws) {
 		var posy2= 600;
 		var Point2= new Model.Point(posx2, posy2);
 		var Serpent2= new Model.Serpent(Point2);
-		for(var t1=0; t1<taille;t1++){
+		for(var t1=1; t1<taille;t1++){
 			var Point22= new Model.Point(posx2, posy2-t1*2);
 			Serpent2.Tableau.push(Point22);
 		}
@@ -107,10 +107,6 @@ wss.on('connection', function(ws) {
 	
 	
 	
-	
-	
-	
-	
 });
 
 
@@ -139,22 +135,34 @@ function begin(Joueurs){
 	}
 }
 function update(){
-	console.log('calcul');
 	
-	console.log('update serpent 1 %s %s', Joueurs[0].Serpent.Tableau[0].x, Joueurs[0].Serpent.Tableau[0].y);
-	console.log('update serpent 2 %s %s', Joueurs[1].Serpent.Tableau[0].x, Joueurs[1].Serpent.Tableau[0].y);
-	for (var i = Joueurs[0].Serpent.Tableau[0].length - 1; i > 0; i--) {
-		Joueurs[0].Serpent.Tableau[i]= Joueurs[0].Serpent.tableau[i-1];
-		Joueurs[1].Serpent.Tableau[i]= Joueurs[1].Serpent.tableau[i-1];
+	//console.log('update serpent 1.1 %s %s', Joueurs[1].Serpent.Tableau[0].x, Joueurs[1].Serpent.Tableau[0].y);
+	//console.log('update serpent 2.1 %s %s', Joueurs[1].Serpent.Tableau[1].x, Joueurs[1].Serpent.Tableau[1].y);
+	//console.log('update serpent 1 taille %s ', Joueurs[0].Serpent.Tableau.length);
+	for (var i = taille-1 ; i > 0 ; i--) {
+		var ax= Joueurs[0].Serpent.Tableau[i-1].x;
+		var ay= Joueurs[0].Serpent.Tableau[i-1].y;
+		var bx= Joueurs[1].Serpent.Tableau[i-1].x;
+		var by= Joueurs[1].Serpent.Tableau[i-1].y;
+		//console.log('update serpent 2b  %s %s', bx, by);
+		Joueurs[0].Serpent.Tableau[i].x= ax;
+		Joueurs[0].Serpent.Tableau[i].y= ay;
+		Joueurs[1].Serpent.Tableau[i].x= bx;
+		Joueurs[1].Serpent.Tableau[i].y= by;
+		//console.log('update serpent 1.%s %s %s',i, Joueurs[0].Serpent.Tableau[i].x, Joueurs[0].Serpent.Tableau[i].y);
+		//console.log('update serpent 2.%s %s %s',i, Joueurs[1].Serpent.Tableau[i].x, Joueurs[1].Serpent.Tableau[i].y);
 	}
+	//console.log('update serpent 1.2 %s %s', Joueurs[1].Serpent.Tableau[0].x, Joueurs[1].Serpent.Tableau[0].y);
+	//console.log('update serpent 2.2 %s %s', Joueurs[1].Serpent.Tableau[1].x, Joueurs[1].Serpent.Tableau[1].y);
+	//console.log('update serpent 2b  %s %s', bx, by);
 	Joueurs[0].Serpent.Tableau[0].x += nexttete1[0];
 	Joueurs[0].Serpent.Tableau[0].y += nexttete1[1];
 	Joueurs[1].Serpent.Tableau[0].x += nexttete2[0];
 	Joueurs[1].Serpent.Tableau[0].y += nexttete2[1];
+	//console.log('update serpent 2b  %s %s', bx, by);
+	//console.log('update serpent 1.3 %s %s', Joueurs[1].Serpent.Tableau[0].x, Joueurs[1].Serpent.Tableau[0].y);
+	//console.log('update serpent 2.3 %s %s', Joueurs[1].Serpent.Tableau[1].x, Joueurs[1].Serpent.Tableau[1].y);
 	
-	
-	console.log('update serpent 1 %s %s', Joueurs[0].Serpent.Tableau[0].x, Joueurs[0].Serpent.Tableau[0].y);
-	console.log('update serpent 2 %s %s', Joueurs[1].Serpent.Tableau[0].x, Joueurs[1].Serpent.Tableau[0].y);
 	var message1 = { 
 			type : "majserpents",
 			Serpent1 : Joueurs[0].Serpent.Tableau,
@@ -168,6 +176,7 @@ function update(){
 			Serpent2 : Joueurs[0].Serpent.Tableau
 	};
 	ws2.send(JSON.stringify(message2));
+	
 }
 
 
