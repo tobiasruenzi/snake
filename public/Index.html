@@ -5,24 +5,23 @@
 <script type="text/javascript" src="js/dist/paper-full.js"></script>
 
 <script type="text/paperscript" canvas="paper">
-
-
-ws = new WebSocket('wss://localhost:8999');
-
+var host=window.location.host;
+console.log();
+ws = new WebSocket('wss://'+host);
+var person;
 ws.onopen = function (event) 
 {
 	console.log('Connecte au server');
 };
 
 var myBall=[];
-var tabCercles=[];
 var tabSerpent=[];
-
+var text;
 var numJoueur;
 
 
 
-var from = new Point(0, 0);
+var from = new Point(1, 1);
 var to = new Point(1200, 800);
 var rect = new Path.Rectangle(from, to);
 rect.strokeColor = 'black';
@@ -66,28 +65,52 @@ function onFrame(event) {
 
 							tabSerpent[y][i].position.y = Serpent[y][i].y;	
 						}
+							
 					}
 					else {
 						//creation
-						var color = new Color(Math.random(),Math.random(),Math.random());
+						var color
+						if (y==numJoueur) {
+							color = new Color(Math.random(),Math.random(),Math.random());
+						}
+						else {
+							color='black'
+						}
+						//var color = new Color(Math.random(),Math.random(),Math.random());
 						var tabCercles=[];
 						for (var i=0; i<Serpent[y].length;i++){
+							
 							var cercle=new Path.Circle(Serpent[y][i].x,Serpent[y][i].y, 20);
 							cercle.fillColor= color;
 							cercle.fillColor.hue =  cercle.fillColor.hue + i;
 							tabCercles.push(cercle);
 						}
+							
 						tabSerpent.push(tabCercles);
 					}
 				}
 		break;
 			case "delserpents" :
+				//console.log(numJoueur);
+				//console.log(msg.index);
+				for (var i=0; i<tabSerpent[msg.index].length;i++){
+					//console.log("suppression", msg.index);
+					tabSerpent[msg.index][i].visible=false;
+				}
+				tabSerpent.splice(msg.index,1); 
+break;			
+			case "perdu" :
+				//console.log(numJoueur);
+				
+				for (var i=0; i<tabSerpent[msg.index].length;i++){
+					tabSerpent[numJoueur][i].visible=false;
+				}
 				tabSerpent.splice(msg.index,1); 
 break;			
 		}
 
 	};
-//if (){
+
 
 }
 
@@ -96,8 +119,7 @@ break;
 <title>this is the Game</title>
 </head>
 <body>
-
-	<h1>Snakes on a Plan</h1>
 	<canvas id="paper" width="1200" height="800" keepalive="true" style="border:1px solid #000000;"></canvas>
+	<p>"Snakes on a Plan" by Tobias Runzi</p>
 </body>
 </html>

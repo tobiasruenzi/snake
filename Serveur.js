@@ -33,7 +33,7 @@ var WebSocketServer = require('ws').Server
 , wss = new WebSocketServer({ server:server});
 var Joueurs = [];
 var nexttetebase= [0,5];
-var taille=50;
+var taille=100;
 
 setInterval(onFrame, 10);
 
@@ -105,13 +105,12 @@ function begin(Joueurs){
 }
 function deleteplayer(o){
 	Joueurs[o].ws.close();
-	console.log("Joueur %s deconnecté, %s joueurs restant", o , Joueurs.length);
+	
 	Joueurs.splice(o,1); 
 	console.log("Joueur %s deconnecté, %s joueurs restant", o , Joueurs.length);
 	for(var y=0;y<Joueurs.length;y++){
 		var message = { 
 				type : "delserpents",
-				Serpent : TabSerpent,
 				index : o
 		};
 		try { 
@@ -139,6 +138,8 @@ function update(){
 	for(var e=0;e<Joueurs.length;e++){
 		Joueurs[e].Serpent[0].x += Joueurs[e].nexttete[0];
 		Joueurs[e].Serpent[0].y += Joueurs[e].nexttete[1];
+		portal(Joueurs[e].Serpent[0]);
+		detect(e);
 	}
 
 
@@ -163,7 +164,48 @@ function update(){
 
 	}
 }
+function portal(point) {
+	//console.log("pos x: %s Pos y: %s", point.x , point.y);
+	if (point.x<0) {
+		point.x=1200;
+	}
+	if(point.x>1200) {
+		point.x=1;
+	}
+	if (point.y<0) {
+		point.y=800;
+	}
+	if(point.y>800) {
+		point.y=1;
+	}
+}
+function detect(idj) {
+	for(var k=0; k<Joueurs.length;k++){
+		if(idj!=k) {
+			for(var m=0; m<Joueurs[k].Serpent.length;m++) {
+				var x = (Joueurs[k].Serpent[m].x - Joueurs[idj].Serpent[0].x);
+				var y = (Joueurs[k].Serpent[m].y - Joueurs[idj].Serpent[0].y);
+				var distance = Math.sqrt((x*x)+(y*y));
+				if (distance <= 40)
+				{
+					var message = { 
+							type : "perdu",
+					};
+					try { 
+						Joueurs[idj].ws.send(JSON.stringify(message));
+					}
+					catch (e) { 
 
+					}
+					deleteplayer(idj);
+					console.log("joueur %s a foncé dans %s, quel vilain!", idj , k)
+					k=Joueurs.length+1;
+					break;
+				}
+			}
+		}	
+	}
+}
 
 
 
