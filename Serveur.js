@@ -112,7 +112,7 @@ function deleteplayer(o){
 		var message = { 
 				type : "delserpents",
 				Serpent : TabSerpent,
-				index : y
+				index : o
 		};
 		try { 
 			Joueurs[y].ws.send(JSON.stringify(message));

@@ -45,17 +45,21 @@ function onMouseDown(event) {
 
 function onFrame(event) {
 
-	ws.onmessage = function (message) { 
+	ws.onmessage = function (message) 
+	{ 
+
 		var msg = JSON.parse(message.data);
-		switch(msg.type) {	
+
+
+		switch(msg.type)
+		{	
 			case "majserpents" :
-			//var cercle=new Path.Circle(300,300, 50);
-			//cercle.fillColor= new Color(Math.random(),Math.random(),Math.random());
+
 				numJoueur = msg.index;
 				Serpent = msg.Serpent;
+
 				for(var y=0;y<Serpent.length;y++){
-					
-					if(y==tabSerpent.length-1){
+					if(y<=tabSerpent.length-1){
 						//mise a jour
 						for (var i=0; i<Serpent[y].length;i++){
 							tabSerpent[y][i].position.x = Serpent[y][i].x;
@@ -76,10 +80,10 @@ function onFrame(event) {
 						tabSerpent.push(tabCercles);
 					}
 				}
-				break;
+		break;
 			case "delserpents" :
 				tabSerpent.splice(msg.index,1); 
-				break;			
+break;			
 		}
 
 	};
