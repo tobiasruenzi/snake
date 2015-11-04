@@ -4,25 +4,21 @@
 <!-- Load the Paper.js library -->
 <script type="text/javascript" src="js/dist/paper-full.js"></script>
 
-
 <script type="text/paperscript" canvas="paper">
-//console.log('entree dans le javascript');
+
 
 ws = new WebSocket('wss://localhost:8999');
-//console.log('server cree');
 
 ws.onopen = function (event) 
 {
-  	//console.log('Connecte au server');
+	console.log('Connecte au server');
 };
 
-var color1 = new Color(Math.random(), Math.random(), Math.random());
-var color2 = new Color(Math.random(), Math.random(), Math.random());
 var myBall=[];
-var Ball=[];
-var monserpent;
-var autreserpent;
+var tabCercles=[];
+var tabSerpent=[];
 
+var numJoueur;
 
 
 
@@ -36,75 +32,68 @@ vectorDir.length = 5;
 
 
 function onMouseDown(event) {
-	vectorDir = event.point - myBall[0].position;
+	vectorDir = event.point - tabSerpent[numJoueur][0].position;
 	vectorDir.length = 5;
 	var message = { 
-				type : "tete",
-				x : vectorDir.x,
-				y : vectorDir.y
-			};
+			type : "tete",
+			x : vectorDir.x,
+			y : vectorDir.y
+	};
+
 	ws.send(JSON.stringify(message));
-console.log('tete envoyé');
 }
 
 function onFrame(event) {
-ws.onmessage = function (message) 
-{ 
-	
-	var msg = JSON.parse(message.data);
 
-	
-	switch(msg.type)
-	{	
-		case "creeserpents" :
-			console.log( msg);
-			monserpent = msg.Serpent1;
-			autreserpent = msg.Serpent2;
-			
-			for (var i=0; i<monserpent.length;i++){
-				var cercle=new Path.Circle(monserpent[i].x,monserpent[i].y, 20);
-				cercle.fillColor= color1;
-				cercle.fillColor.hue =  cercle.fillColor.hue + i;
-				myBall.push(cercle);
-				
-			}
-			for (var i=0; i<autreserpent.length;i++){
-				var cercle=new Path.Circle(autreserpent[i].x,autreserpent[i].y, 20);
-				cercle.fillColor= color2;
-				cercle.fillColor.hue =  cercle.fillColor.hue + i;
-				Ball.push(cercle);
-				
-			}
+	ws.onmessage = function (message) { 
+		var msg = JSON.parse(message.data);
+		switch(msg.type) {	
+			case "majserpents" :
+			//var cercle=new Path.Circle(300,300, 50);
+			//cercle.fillColor= new Color(Math.random(),Math.random(),Math.random());
+				numJoueur = msg.index;
+				Serpent = msg.Serpent;
+				for(var y=0;y<Serpent.length;y++){
+					
+					if(y==tabSerpent.length-1){
+						//mise a jour
+						for (var i=0; i<Serpent[y].length;i++){
+							tabSerpent[y][i].position.x = Serpent[y][i].x;
 
-		case "majserpents" :
-			//console.log( msg.Serpent1[0], msg.Serpent2[0]);
-			
-			for (var i=0; i< msg.Serpent1.length;i++){
-				myBall[i].position.x = msg.Serpent1[i].x;
-				myBall[i].position.y = msg.Serpent1[i].y;
-			}
-			for (var i=0; i< msg.Serpent2.length;i++){
-				Ball[i].position.x = msg.Serpent2[i].x;
-				Ball[i].position.y = msg.Serpent2[i].y;
-			}
-			
-			
-			
-	}
+							tabSerpent[y][i].position.y = Serpent[y][i].y;	
+						}
+					}
+					else {
+						//creation
+						var color = new Color(Math.random(),Math.random(),Math.random());
+						var tabCercles=[];
+						for (var i=0; i<Serpent[y].length;i++){
+							var cercle=new Path.Circle(Serpent[y][i].x,Serpent[y][i].y, 20);
+							cercle.fillColor= color;
+							cercle.fillColor.hue =  cercle.fillColor.hue + i;
+							tabCercles.push(cercle);
+						}
+						tabSerpent.push(tabCercles);
+					}
+				}
+				break;
+			case "delserpents" :
+				tabSerpent.splice(msg.index,1); 
+				break;			
+		}
 
-};
-
+	};
+//if (){
 
 }
-	
-console.log('dessin termine');
+
 </script>
 
 <title>this is the Game</title>
 </head>
 <body>
 
-	<h1>Snakes</h1>
-	<canvas id="paper" width="1200" height="800"></canvas>
+	<h1>Snakes on a Plan</h1>
+	<canvas id="paper" width="1200" height="800" keepalive="true" style="border:1px solid #000000;"></canvas>
 </body>
 </html>
