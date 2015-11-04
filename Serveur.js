@@ -32,7 +32,7 @@ app.configure(function() {
 var WebSocketServer = require('ws').Server
 , wss = new WebSocketServer({ server:server});
 var Joueurs = [];
-var nexttetebase= [0,5];
+var nexttetebase= [Math.random() *5,Math.random() *5];
 var taille=100;
 
 setInterval(onFrame, 10);
